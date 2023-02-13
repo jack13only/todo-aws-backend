@@ -3,7 +3,12 @@ import type { AWS } from '@serverless/typescript'
 const serverlessConfiguration: AWS = {
   service: 'aws-todo-backend',
   frameworkVersion: '3',
+  useDotenv: true,
   plugins: ['serverless-bundle'],
+  custom: {
+    stage: "${opt:stage, 'test'}",
+    TODO_TABLE: 'todo-table--${self:custom.stage}'
+  },
   provider: {
     name: 'aws',
     runtime: 'nodejs16.x',
@@ -12,7 +17,7 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
-      TODO_TABLE: 'todotable',
+      TODO_TABLE: '${self:custom.TODO_TABLE}',
       REGION: 'eu-west-1'
     },
     iamRoleStatements: [
@@ -26,7 +31,7 @@ const serverlessConfiguration: AWS = {
           'dynamodb:UpdateItem',
           'dynamodb:DeleteItem'
         ],
-        Resource: { 'Fn::GetAtt': ['todotable', 'Arn'] }
+        Resource: { 'Fn::GetAtt': ['TodoTable', 'Arn'] }
       }
     ]
   },
@@ -37,7 +42,18 @@ const serverlessConfiguration: AWS = {
         {
           http: {
             method: 'get',
-            path: 'get-todo'
+            path: 'todo'
+          }
+        }
+      ]
+    },
+    getTodoById: {
+      handler: 'handler.getTodoById',
+      events: [
+        {
+          http: {
+            method: 'get',
+            path: 'todo/{id}'
           }
         }
       ]
@@ -45,10 +61,10 @@ const serverlessConfiguration: AWS = {
   },
   resources: {
     Resources: {
-      todotable: {
+      TodoTable: {
         Type: 'AWS::DynamoDB::Table',
         Properties: {
-          TableName: 'todotable',
+          TableName: '${self:custom.TODO_TABLE}',
           AttributeDefinitions: [
             {
               AttributeName: 'id',

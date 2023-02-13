@@ -4,21 +4,30 @@ import { headers } from '../helpers/headers'
 import { getDbClient } from '../clients/dynamodb'
 
 export const getTodos = async () => {
-  const dbClient = getDbClient()
+  try {
+    const dbClient = getDbClient()
 
-  const { TODO_TABLE } = process.env
+    const { TODO_TABLE } = process.env
 
-  if (!TODO_TABLE) throw new Error('No REGION defined')
-  const getParams = {
-    TableName: TODO_TABLE
-  }
+    if (!TODO_TABLE) throw new Error('TODO_TABLE is not defined')
 
-  const response = await dbClient.send(new ScanCommand(getParams))
-  const items = response.Items?.map((item) => unmarshall(item))
+    const getParams = {
+      TableName: TODO_TABLE
+    }
 
-  return {
-    statusCode: 200,
-    headers,
-    body: JSON.stringify(items)
+    const response = await dbClient.send(new ScanCommand(getParams))
+    const items = response.Items?.map((item) => unmarshall(item))
+
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify(items)
+    }
+  } catch (err) {
+    return {
+      statusCode: 500,
+      headers,
+      body: 'Something goes wrong with getting data'
+    }
   }
 }
