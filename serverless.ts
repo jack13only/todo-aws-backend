@@ -57,6 +57,28 @@ const serverlessConfiguration: AWS = {
           }
         }
       ]
+    },
+    addUpdateTodo: {
+      handler: 'handler.addUpdateTodo',
+      events: [
+        {
+          http: {
+            method: 'post',
+            path: 'todo'
+          }
+        }
+      ]
+    },
+    deleteTodos: {
+      handler: 'handler.deleteTodos',
+      events: [
+        {
+          http: {
+            method: 'post',
+            path: 'todo/delete'
+          }
+        }
+      ]
     }
   },
   resources: {

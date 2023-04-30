@@ -4,6 +4,7 @@
 	},
 	"devDependencies": {
 		"@serverless/typescript": "3.27.0",
+		"@types/uuid": "^9.0.1",
 		"@typescript-eslint/eslint-plugin": "^5.51.0",
 		"@typescript-eslint/parser": "^5.51.0",
 		"eslint": "^8.34.0",
@@ -16,6 +17,7 @@
 	},
 	"dependencies": {
 		"@aws-sdk/client-dynamodb": "3.218.0",
-		"@aws-sdk/util-dynamodb": "3.218.0"
+		"@aws-sdk/util-dynamodb": "3.218.0",
+		"uuid": "^9.0.0"
 	}
 }
