@@ -42,7 +42,8 @@ const serverlessConfiguration: AWS = {
         {
           http: {
             method: 'get',
-            path: 'todo'
+            path: 'todo',
+            cors: true
           }
         }
       ]
@@ -53,7 +54,8 @@ const serverlessConfiguration: AWS = {
         {
           http: {
             method: 'get',
-            path: 'todo/{id}'
+            path: 'todo/{id}',
+            cors: true
           }
         }
       ]
@@ -64,7 +66,8 @@ const serverlessConfiguration: AWS = {
         {
           http: {
             method: 'post',
-            path: 'todo'
+            path: 'todo',
+            cors: true
           }
         }
       ]
@@ -75,7 +78,20 @@ const serverlessConfiguration: AWS = {
         {
           http: {
             method: 'post',
-            path: 'todo/delete'
+            path: 'todo/delete',
+            cors: true
+          }
+        }
+      ]
+    },
+    deleteTodoById: {
+      handler: 'handler.deleteTodoById',
+      events: [
+        {
+          http: {
+            method: 'delete',
+            path: 'todo/{id}',
+            cors: true
           }
         }
       ]
